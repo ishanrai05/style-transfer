@@ -33,3 +33,22 @@ def image_loader(img_path, max_size=512, shape=None):
     
     return image
 
+
+def tensor_to_image(tensor):
+    
+    # constructs a new view on a tensor which is declared not to need gradients,
+    # i.e., it is to be excluded from further tracking of operations
+    img = tensor.to("cpu").clone().detach()
+    
+    # convert the image to numpy and remove an extra dimension
+    img = img.numpy().squeeze()
+    
+    img = img.transpose(1,2,0)
+    
+    # Unnormalize the image
+    img = img * np.array((0.229, 0.224, 0.225)) +  np.array((0.485, 0.456, 0.406))
+    
+    img  = img.clip(0,1)
+    
+    return img
+
