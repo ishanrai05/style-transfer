@@ -71,3 +71,13 @@ def get_features(image, model, layers=None):
             features[layers[name]] = x
     return features
 
+
+def gram_matrix(tensor):
+    
+    _, d, w, h = tensor.shape
+    
+    tensor = tensor.view(d, h*w)
+    
+    gram = torch.mm(tensor, tensor.t())
+    
+    return gram
